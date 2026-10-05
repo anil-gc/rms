@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+.env.*
+*.sqlite3
+*.sqlite3-*
+**/__pycache__
+**/node_modules
+frontend/dist
+staticfiles
+output
+backups
+.playwright-cli
+*.log

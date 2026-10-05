@@ -1,0 +1,24 @@
+# Add this service to render.yaml after setting up a private S3 backup bucket.
+# Keep database and web entries from render.yaml. No purchases are made by this file.
+services:
+  - type: cron
+    name: restaurant-daily-backup
+    runtime: docker
+    dockerfilePath: ./ops/Backup.Dockerfile
+    plan: 0.5c-512mb
+    region: singapore
+    schedule: "15 20 * * *" # 02:00 Nepal time
+    dockerCommand: python ops/backup.py daily
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: restaurant-desk-db
+          property: connectionString
+      - key: BACKUP_BUCKET
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_DEFAULT_REGION
+        sync: false

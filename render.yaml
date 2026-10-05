@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: restaurant-desk
+    runtime: docker
+    plan: 0.5c-512mb
+    region: singapore
+    healthCheckPath: /health/
+    preDeployCommand: python manage.py migrate --noinput && python manage.py check --deploy --fail-level WARNING
+    envVars:
+      - key: DEBUG
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: restaurant-desk-db
+          property: connectionString
+databases:
+  - name: restaurant-desk-db
+    databaseName: restaurant
+    user: restaurant
+    plan: 0.1c-256mb
+    region: singapore
+    postgresMajorVersion: "17"
+    ipAllowList: []
